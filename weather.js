@@ -6,44 +6,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const temperatureDisplay = document.getElementById("temperature");
     const descriptionDisplay = document.getElementById("description");
     const errorMessage = document.getElementById("error-message");
-  
+
     const API_Key = "f5fe51a7c8c9d46a6ec3bf8991d60bad";
-  
+
     getWeatherBtn.addEventListener("click", async () => {
-      const city = cityInput.value.trim();
-      if (!city) return;
-      try {
-        const weatherData = await fetchWeatherData(city);
-        displayWeatherData(weatherData);
-      } catch (error) {
-        showError();
-      }
+        const city = cityInput.value.trim();
+        if (!city) return;
+        try {
+            const weatherData = await fetchWeatherData(city);
+            displayWeatherData(weatherData);
+        } catch (error) {
+            showError();
+        }
     });
-  
+
     async function fetchWeatherData(city) {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${API_Key}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      if (!response.ok) {
-        console.error(data);
-        throw new Error(data.message || "City Not Found");
-      }
-      return data;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_Key}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("City Not Found");
+        }
+        const data = await response.json();
+        return data;
     }
-  
+
     function displayWeatherData(data) {
-      errorMessage.classList.add("hidden");
-      const { name, main, weather } = data;
-      cityNameDisplay.textContent = name;
-      const tempInCelsius = (main.temp - 273.15).toFixed(1);
-      temperatureDisplay.textContent = `Temperature: ${tempInCelsius}°C`;
-      descriptionDisplay.textContent = `Weather: ${weather[0].description}`;
-      weatherInfo.classList.remove("hidden");
+        errorMessage.classList.add("hidden");
+        const { name, main, weather } = data;
+        cityNameDisplay.textContent = name;
+        const tempInCelsius = (main.temp - 273.15).toFixed(1);
+        temperatureDisplay.textContent = `Temperature : ${tempInCelsius}°C`;
+        descriptionDisplay.textContent = `Weather : ${weather[0].description}`;
+        weatherInfo.classList.remove("hidden");
     }
-  
+
     function showError() {
-      errorMessage.classList.remove("hidden");
-      weatherInfo.classList.add("hidden");
+        errorMessage.classList.remove("hidden");
+        weatherInfo.classList.add("hidden");
     }
-  });
-  
+});
